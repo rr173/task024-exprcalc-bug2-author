@@ -193,10 +193,12 @@ type callNode struct {
 }
 
 func (n *callNode) eval(vars map[string]float64) (float64, error) {
-	fn := functions[n.name]
+	fn, ok := functions[n.name]
+	if !ok {
+		return 0, fmt.Errorf("%w: %s", ErrUnknownFunc, n.name)
+	}
 	return fn(n.args, vars)
 }
-
 // ---------------------------------------------------------------------------
 // 内置函数
 // ---------------------------------------------------------------------------
